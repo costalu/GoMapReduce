@@ -8,18 +8,21 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"time"
 )
 
 func mapper(str string) map[string]int {
 	wordList := strings.Fields(str)
 	counts := make(map[string]int)
 	for _, word := range wordList {
-		if !isPreposition(word) {
-			_, exists := counts[word]
+		lowerWord := strings.ToLower(word)
+
+		if !isPreposition(lowerWord) {
+			_, exists := counts[lowerWord]
 			if exists {
-				counts[word]++
+				counts[lowerWord]++
 			} else {
-				counts[word] = 1
+				counts[lowerWord] = 1
 			}
 		}
 	}
@@ -51,7 +54,20 @@ func isPreposition(word string) bool {
 		"and",
 		"or",
 		"but",
-		"etc":
+		"etc",
+		"for",
+		"in",
+		"to",
+		"is",
+		"so",
+		"are",
+		"on",
+		"of",
+		"this",
+		"that",
+		"with",
+		"it",
+		"like":
 		return true
 	}
 	return false
@@ -81,6 +97,8 @@ func printMostFrequentWords(m map[string]int) {
 }
 
 func main() {
+	start := time.Now()
+
 	csvfile, err := os.Open("TweetsNBA.csv")
 	if err != nil {
 		log.Fatalln("Couldn't open the csv file", err)
@@ -103,4 +121,8 @@ func main() {
 
 	wordFrequencies := reducer(maps)
 	printMostFrequentWords(wordFrequencies)
+
+	stop := time.Now()
+	elapsed := stop.Sub(start)
+	fmt.Println(elapsed)
 }
