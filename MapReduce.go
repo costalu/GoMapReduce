@@ -14,11 +14,13 @@ func mapper(str string) map[string]int {
 	wordList := strings.Fields(str)
 	counts := make(map[string]int)
 	for _, word := range wordList {
-		_, exists := counts[word]
-		if exists {
-			counts[word]++
-		} else {
-			counts[word] = 1
+		if !isPreposition(word) {
+			_, exists := counts[word]
+			if exists {
+				counts[word]++
+			} else {
+				counts[word] = 1
+			}
 		}
 	}
 	return counts
@@ -38,6 +40,21 @@ func reducer(maps []map[string]int) map[string]int {
 		}
 	}
 	return res
+}
+
+func isPreposition(word string) bool {
+	switch word {
+	case
+		"a",
+		"an",
+		"the",
+		"and",
+		"or",
+		"but",
+		"etc":
+		return true
+	}
+	return false
 }
 
 func printMostFrequentWords(m map[string]int) {
