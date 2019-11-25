@@ -17,6 +17,10 @@ func sequential() {
 
 	r := csv.NewReader(csvfile)
 
+	if _, err := r.Read(); err != nil {
+		log.Fatal(err)
+	}
+
 	maps := []map[string]int{}
 
 	for {
@@ -34,7 +38,7 @@ func sequential() {
 	printMostFrequentWords(wordFrequencies)
 }
 
-func concurrent() {
+func distributed() {
 	csvfile, err := os.Open("TweetsNBA.csv")
 	if err != nil {
 		log.Fatalln("Couldn't open the csv file", err)
@@ -42,7 +46,13 @@ func concurrent() {
 
 	r := csv.NewReader(csvfile)
 
+	if _, err := r.Read(); err != nil {
+		log.Fatal(err)
+	}
+
 	maps := make(chan map[string]int)
+
+	length := 0
 
 	for {
 		record, err := r.Read()
@@ -52,12 +62,15 @@ func concurrent() {
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		length++
+
 		go func(record []string) {
 			maps <- Map(record[1])
 		}(record)
 	}
 
-	wordFrequencies := FastReduce(maps, 5146)
+	wordFrequencies := DistributedReduce(maps, length)
 	printMostFrequentWords(wordFrequencies)
 }
 
@@ -68,10 +81,10 @@ func main() {
 	elapsedSequential := stop.Sub(start)
 
 	start = time.Now()
-	concurrent()
+	distributed()
 	stop = time.Now()
-	elapsedConcurrent := stop.Sub(start)
+	elapsedDistributed := stop.Sub(start)
 
 	fmt.Println("Sequential Time: ", elapsedSequential)
-	fmt.Println("Concurrent Time: ", elapsedConcurrent)
+	fmt.Println("Distributed Time: ", elapsedDistributed)
 }

@@ -17,8 +17,8 @@ func Reduce(maps []map[string]int) map[string]int {
 	return result
 }
 
-// FastReduce reduces a channel of maps to a single map
-func FastReduce(maps chan map[string]int, length int) map[string]int {
+// DistributedReduce reduces a channel of maps to a single map
+func DistributedReduce(maps chan map[string]int, length int) map[string]int {
 	result := map[string]int{}
 
 	for i := 0; i < length; i++ {
