@@ -116,7 +116,7 @@ my -> 618
 
 ### Distributed/Parallel Map Reduce (language of choice: Golang)
 
-Approach we took:
+Approach we took: We used go routines and channels.
 
 *Output:*
 
