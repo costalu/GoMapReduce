@@ -2,7 +2,7 @@
 
 1. Andrew Stanley - 991431494
 2. Fernando Costa - 991447247
-3. Andrew Bordin -
+3. Andrew Bordin - 991436444
 
 ### Sequential Map Reduce (language of choice: Golang)
 
